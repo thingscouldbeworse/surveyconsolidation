@@ -17,15 +17,22 @@ search_card = 'COM' # all SDcards should be named 'COM0##'. If there's a differe
 volumes = os.listdir('/Volumes') # all attached drives
 
 for volume in volumes:
-	if search_card in str(volume):
+	if search_card in str(volume) and ' ' not in str(volume):
 		sdcards.append(volume) # append to list of actual sdcards
+
 
 for sdcard in sdcards: # for every actual sdcard
 
-	answerFiles = os.listdir( '/Volumes/' + str(sdcard) + '/' + source_suffix ) # answers are in multiple files 
+	files = os.listdir( '/Volumes/' + str(sdcard) )
+	if source_suffix not in files:
+		print( "No " + source_suffix + " directory on card " + str(sdcard) )
+	else:
+		answerFiles = os.listdir( '/Volumes/' + str(sdcard) + '/' + source_suffix ) # answers are in multiple files 
 
-	for answerFile in answerFiles:
-		source 		= '/Volumes/' + str(sdcard) + '/' + source_suffix + str(answerFile) # build the filepaths
-		destination = destination_prefix + str(answerFile)
-	
-		copyfile( source, destination ) # copy the files where we need them
+		for answerFile in answerFiles:
+			source 		= '/Volumes/' + str(sdcard) + '/' + source_suffix + str(answerFile) # build the filepaths
+			destination = destination_prefix + str(answerFile)
+			
+			print( 'copying from ' + str(sdcard) + '...' )
+			copyfile( source, destination ) # copy the files where we need them
+			print( ' done.' )
