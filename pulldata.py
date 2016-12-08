@@ -6,10 +6,11 @@
 """
 
 import os
+import sys
 from shutil import copyfile
 
-destination_prefix 	= 'files/' # this should be changed if the name of the destination directory is changed
-source_suffix 		= 'AnswersArchive/' # change this if the SDcard directory structure changes
+destination_prefix 	= 'files' # this should be changed if the name of the destination directory is changed
+source_suffix 		= 'AnswersArchive' # change this if the SDcard directory structure changes
 
 sdcards = []
 search_card = 'COM' # all SDcards should be named 'COM0##'. If there's a different signifier, alter this line
@@ -24,15 +25,16 @@ for volume in volumes:
 for sdcard in sdcards: # for every actual sdcard
 
 	files = os.listdir( '/Volumes/' + str(sdcard) )
+	print( files )
 	if source_suffix not in files:
 		print( "No " + source_suffix + " directory on card " + str(sdcard) )
 	else:
-		answerFiles = os.listdir( '/Volumes/' + str(sdcard) + '/' + source_suffix ) # answers are in multiple files 
+		answerFiles = os.listdir( '/Volumes/' + str(sdcard) + '/' + source_suffix + '/' ) # answers are in multiple files 
 
 		for answerFile in answerFiles:
-			source 		= '/Volumes/' + str(sdcard) + '/' + source_suffix + str(answerFile) # build the filepaths
-			destination = destination_prefix + str(answerFile)
+			source 		= '/Volumes/' + str(sdcard) + '/' + source_suffix + '/' + str(answerFile) # build the filepaths
+			destination = destination_prefix + '/' + str(answerFile)
 			
-			print( 'copying from ' + str(sdcard) + '...' )
+			sys.stdout.write( 'copying from ' + str(sdcard) + '... ' )
 			copyfile( source, destination ) # copy the files where we need them
-			print( ' done.' )
+			sys.stdout.write( 'done\n' )
